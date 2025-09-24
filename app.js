@@ -47,17 +47,6 @@ app.get('/v1/estados', (request, response) => {
     response.json(estados)
 })
 
-app.get('/v1/estado/nome/:uf', (request, response) => {
-    let sigla      = request.params.uf;
-    let nomeEstado = dados.getEstadoBySigla(sigla);
-    
-    if (nomeEstado.status){
-    response.status(estado.status_code).json(nomeEstado)
-    } else {
-    response.status(estado.status_code).json(nomeEstado)
-    }
-})
-
 app.get('/v1/estado/:uf', function(request, response){
     let sigla = request.params.uf
     console.log(sigla)
@@ -73,6 +62,40 @@ app.get('/v1/estado/regiao/:id', function(request, response){
     console.log(regiao)
     console.log(id)
 })
+
+app.get('/v1/estado/nome/:uf', (request, response) => {
+    let sigla      = request.params.uf;
+    let resultado = dados.getEstadoBySigla(sigla);
+    
+    response.status(resultado.status_code).json(resultado); // Retorna o resultado com o status apropriado
+})
+
+app.get('/v1/estado/capital/:uf', (request, response) => {
+    let sigla = request.params.uf;
+    let resultado = dados.getCapitalBySigla(sigla);
+
+    response.status(resultado.status_code).json(resultado); // Retorna o resultado com o status apropriado
+})
+
+app.get('/v1/estados/regiao/:regiao', (request, response) => {
+    let regiao = request.params.regiao; // Obtém a região da URL
+    let resultado = dados.getEstadosByRegiao(regiao); // Chama a função
+
+    response.status(resultado.status_code).json(resultado); // Retorna o resultado com o status apropriado
+});
+
+app.get('/v1/estados/capitais/pais', (request, response) => {
+    let resultado = dados.getVerifyCapitaisDoPais(); // Chama a função sem parâmetros
+
+    response.status(resultado.status_code).json(resultado); // Retorna o resultado com o status apropriado
+});
+
+app.get('/v1/estado/cidades/:uf', (request, response) => {
+    let sigla = request.params.uf;
+    let resultado = dados.getCidadesBySigla(sigla);
+    
+    response.status(resultado.status_code).json(resultado);
+});
 
 //start na API
 app.listen(PORT, function(){
